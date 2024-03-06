@@ -24,7 +24,7 @@ func (db *ProductDB) Create(payload *model.ProductPayload) error {
 		Title:       payload.Title,
 		Description: payload.Description,
 		Price:       payload.Price,
-		Category:    payload.Category,
+		CategoryID:  payload.CategoryID,
 	}
 
 	_, err := db.DB.Database("anotai-test").Collection("products").InsertOne(*db.Context, productPayload)
