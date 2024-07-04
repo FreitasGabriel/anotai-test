@@ -12,4 +12,6 @@ func InitProductRoutes(r *gin.RouterGroup, productController productController.P
 
 func InitCategoryRoutes(r *gin.RouterGroup, categoryController categoryController.CategoryControllerInterface) {
 	r.POST("/category", categoryController.CreateCategory)
+	r.GET("/category", categoryController.FindCategory)
+
 }

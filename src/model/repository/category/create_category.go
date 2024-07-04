@@ -1,17 +1,11 @@
 package repository
 
 import (
-	"context"
 	"fmt"
 	"os"
 
 	domain "github.com/FreitasGabriel/anotai-test/src/model/domain/category"
 	"github.com/FreitasGabriel/anotai-test/src/model/repository/entity/converter"
-)
-
-var (
-	MONGO_COLLECTION = "CATEGORY_COLLECTION_NAME"
-	ctx              = context.Background()
 )
 
 func (cr *categoryRepositoryInterface) CreateCategory(category domain.CategoryDomainInterface) error {
