@@ -17,4 +17,5 @@ type productControlerInterface struct {
 
 type ProductControllerInterface interface {
 	CreateProduct(c *gin.Context)
+	FindProductByID(c *gin.Context)
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	productDomain "github.com/FreitasGabriel/anotai-test/src/model/domain/product"
+	"github.com/FreitasGabriel/anotai-test/src/model/repository/entity"
 	repository "github.com/FreitasGabriel/anotai-test/src/model/repository/product"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -18,4 +19,5 @@ type productDomainService struct {
 
 type ProductDomainService interface {
 	CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, error)
+	FindProductByID(id string) (*entity.ProductEntity, error)
 }

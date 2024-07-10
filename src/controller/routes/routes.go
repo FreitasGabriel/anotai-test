@@ -8,6 +8,7 @@ import (
 
 func InitProductRoutes(r *gin.RouterGroup, productController productController.ProductControllerInterface) {
 	r.POST("/product", productController.CreateProduct)
+	r.GET("/product", productController.FindProductByID)
 }
 
 func InitCategoryRoutes(r *gin.RouterGroup, categoryController categoryController.CategoryControllerInterface) {
