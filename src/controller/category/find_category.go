@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (cc *categoryControllerInterface) FindCategory(c *gin.Context) {
+func (cc *categoryControllerInterface) FindCategoryByID(c *gin.Context) {
 
 	category_id := c.Query("id")
 

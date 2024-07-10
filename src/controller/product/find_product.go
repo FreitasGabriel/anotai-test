@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
@@ -30,6 +29,21 @@ func (pc *productControlerInterface) FindProductByID(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err)
 	}
 
-	fmt.Println("result", result)
+	c.JSON(http.StatusOK, result)
+}
+
+func (pc *productControlerInterface) FindProductsByTitle(c *gin.Context) {
+	productTitle := c.Query("title")
+
+	result, err := pc.service.FindProductsByTitle(productTitle)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			logger.Error("product not found in database", err, zap.String("journey", "findProductsByTitle"))
+			c.JSON(http.StatusNotFound, err)
+		}
+		logger.Error("error to get products", err, zap.String("journey", "findProductsByTitle"))
+		c.JSON(http.StatusInternalServerError, err)
+	}
+
 	c.JSON(http.StatusOK, result)
 }

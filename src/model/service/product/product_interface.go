@@ -20,4 +20,5 @@ type productDomainService struct {
 type ProductDomainService interface {
 	CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, error)
 	FindProductByID(id string) (*entity.ProductEntity, error)
+	FindProductsByTitle(title string) (*[]entity.ProductEntity, error)
 }

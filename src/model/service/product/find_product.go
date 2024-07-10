@@ -13,6 +13,17 @@ func (ps *productDomainService) FindProductByID(id string) (*entity.ProductEntit
 		logger.Error("errot to find product", err, zap.String("journey", "findProductByID"))
 		return nil, err
 	}
-
+	logger.Info("product find successfully")
 	return product, nil
+}
+
+func (ps *productDomainService) FindProductsByTitle(title string) (*[]entity.ProductEntity, error) {
+	products, err := ps.productRepository.FindProductsByTitle(title)
+	if err != nil {
+		logger.Error("error to find product with this title", err, zap.String("journey", "findProductsByID"))
+		return nil, err
+	}
+
+	logger.Info("products find successfully")
+	return products, nil
 }

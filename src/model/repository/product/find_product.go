@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
@@ -30,8 +31,30 @@ func (pr *productRepositoryInterface) FindProductByID(id string) (*entity.Produc
 
 	return &product, nil
 }
-func (pr *productRepositoryInterface) FindProductByTitle(title string) (*mongo.SingleResult, *rest_err.RestErr) {
-	return nil, nil
+func (pr *productRepositoryInterface) FindProductsByTitle(title string) (*[]entity.ProductEntity, *rest_err.RestErr) {
+
+	products := []entity.ProductEntity{}
+	collectionName := os.Getenv(COLLECTION_NAME)
+	collection := pr.databaseConn.Collection(collectionName)
+	filter := bson.D{{Key: "title", Value: bson.M{"$regex": fmt.Sprintf("^%s", title)}}}
+
+	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			logger.Error("product not found", err, zap.String("journey", "findProductByTitle"))
+			return nil, rest_err.NewNotFoundError("product not found")
+		}
+		logger.Error("error to get product", err, zap.String("journey", "findProductByTitle"))
+		return nil, rest_err.NewInternalServerError("error to get product")
+	}
+
+	defer cursor.Close(ctx)
+
+	if cursorErr := cursor.All(ctx, &products); cursorErr != nil {
+		logger.Error("could not possible to cursor into slice", err, zap.String("journey", "findProductByTitle"))
+	}
+
+	return &products, nil
 }
 func (pr *productRepositoryInterface) FindProductByCategoryID(category_id string) (*mongo.SingleResult, *rest_err.RestErr) {
 	return nil, nil
