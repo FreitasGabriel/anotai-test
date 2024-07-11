@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
@@ -12,7 +13,7 @@ import (
 
 func (pc *productControlerInterface) FindProductByID(c *gin.Context) {
 
-	productID := c.Query("id")
+	productID := c.Param("id")
 
 	uuidErr := uuid.Validate(productID)
 	if uuidErr != nil {
@@ -33,7 +34,7 @@ func (pc *productControlerInterface) FindProductByID(c *gin.Context) {
 }
 
 func (pc *productControlerInterface) FindProductsByTitle(c *gin.Context) {
-	productTitle := c.Query("title")
+	productTitle := c.Param("title")
 
 	result, err := pc.service.FindProductsByTitle(productTitle)
 	if err != nil {
@@ -42,6 +43,24 @@ func (pc *productControlerInterface) FindProductsByTitle(c *gin.Context) {
 			c.JSON(http.StatusNotFound, err)
 		}
 		logger.Error("error to get products", err, zap.String("journey", "findProductsByTitle"))
+		c.JSON(http.StatusInternalServerError, err)
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func (pc *productControlerInterface) FindProductsByCategoryID(c *gin.Context) {
+	categoryID := c.Param("categoryID")
+
+	uuidErr := uuid.Validate(categoryID)
+	if uuidErr != nil {
+		logger.Error("categoryID is a not valid id", uuidErr, zap.String("Journey", "findProductsByCategoryID"))
+		c.JSON(http.StatusBadRequest, "categoryID is a invalided id")
+	}
+
+	result, err := pc.service.FindProductsByCategoryID(categoryID)
+	if err != nil {
+		logger.Error(fmt.Sprintf("could not possible to find products with this category id : %s", categoryID), err, zap.String("journey", "findProductsByCategoryID"))
 		c.JSON(http.StatusInternalServerError, err)
 	}
 

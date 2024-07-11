@@ -56,6 +56,32 @@ func (pr *productRepositoryInterface) FindProductsByTitle(title string) (*[]enti
 
 	return &products, nil
 }
-func (pr *productRepositoryInterface) FindProductByCategoryID(category_id string) (*mongo.SingleResult, *rest_err.RestErr) {
-	return nil, nil
+func (pr *productRepositoryInterface) FindProductsByCategoryID(category_id string) (*[]entity.ProductEntity, *rest_err.RestErr) {
+
+	products := []entity.ProductEntity{}
+	collectionName := os.Getenv(COLLECTION_NAME)
+	collection := pr.databaseConn.Collection(collectionName)
+	filter := bson.D{{Key: "category_id", Value: category_id}}
+
+	cursor, err := collection.Find(ctx, filter)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			logger.Error("could not find products with this category id", err, zap.String("journey", "findProductsByCategoryID"))
+			return nil, rest_err.NewNotFoundError("could not find products with this category id")
+		}
+		logger.Error("error to get products", err, zap.String("journey", "findProductsByCategoryID"))
+	}
+
+	if err := cursor.All(ctx, &products); err != nil {
+		if err == mongo.ErrNilCursor {
+			logger.Error("could not possible to cursor the products", err, zap.String("journey", "findProductsByCategoryID"))
+			return nil, rest_err.NewInternalServerError("could not posible to cursor the products")
+		}
+		logger.Error("error to get products", err, zap.String("journey", "findProductsByCategoryID"))
+		return nil, rest_err.NewInternalServerError("error to get products")
+	}
+
+	logger.Info(fmt.Sprintf("Find products with category id: %s successfully", category_id), zap.String("journey", "findProductsByCategoryID"))
+
+	return &products, nil
 }

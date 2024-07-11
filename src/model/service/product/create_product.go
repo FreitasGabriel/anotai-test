@@ -1,23 +1,21 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
+	"github.com/FreitasGabriel/anotai-test/src/configuration/rest_err"
 	productDomain "github.com/FreitasGabriel/anotai-test/src/model/domain/product"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 )
 
-func (pd *productDomainService) CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, error) {
+func (pd *productDomainService) CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, *rest_err.RestErr) {
 
 	result, err := pd.productRepository.CreateProduct(product)
 	if err != nil {
 		logger.Error("error to create product", err, zap.String("journey", "createProduct"))
-		return nil, err
+		return nil, rest_err.NewInternalServerError("error to create product")
 	}
 
-	fmt.Println(result)
-
+	logger.Info("product created with succesfully")
 	return result, nil
 }
