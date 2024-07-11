@@ -27,5 +27,5 @@ type ProductRepositoryInterface interface {
 	CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, error)
 	FindProductByID(id string) (*entity.ProductEntity, *rest_err.RestErr)
 	FindProductsByTitle(title string) (*[]entity.ProductEntity, *rest_err.RestErr)
-	FindProductByCategoryID(category_id string) (*mongo.SingleResult, *rest_err.RestErr)
+	FindProductsByCategoryID(category_id string) (*[]entity.ProductEntity, *rest_err.RestErr)
 }

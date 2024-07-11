@@ -19,4 +19,5 @@ type ProductControllerInterface interface {
 	CreateProduct(c *gin.Context)
 	FindProductByID(c *gin.Context)
 	FindProductsByTitle(c *gin.Context)
+	FindProductsByCategoryID(c *gin.Context)
 }

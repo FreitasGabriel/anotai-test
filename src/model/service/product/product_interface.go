@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/FreitasGabriel/anotai-test/src/configuration/rest_err"
 	productDomain "github.com/FreitasGabriel/anotai-test/src/model/domain/product"
 	"github.com/FreitasGabriel/anotai-test/src/model/repository/entity"
 	repository "github.com/FreitasGabriel/anotai-test/src/model/repository/product"
@@ -18,7 +19,8 @@ type productDomainService struct {
 }
 
 type ProductDomainService interface {
-	CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, error)
-	FindProductByID(id string) (*entity.ProductEntity, error)
-	FindProductsByTitle(title string) (*[]entity.ProductEntity, error)
+	CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, *rest_err.RestErr)
+	FindProductByID(id string) (*entity.ProductEntity, *rest_err.RestErr)
+	FindProductsByTitle(title string) (*[]entity.ProductEntity, *rest_err.RestErr)
+	FindProductsByCategoryID(category_id string) (*[]entity.ProductEntity, *rest_err.RestErr)
 }
