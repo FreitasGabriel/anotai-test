@@ -10,7 +10,7 @@ import (
 
 func (cr *categoryRepositoryInterface) CreateCategory(category domain.CategoryDomainInterface) error {
 
-	mongo_collection := os.Getenv(MONGO_COLLECTION)
+	mongo_collection := os.Getenv(CATEGORY_COLLECTION)
 	collection := cr.databaseConn.Collection(mongo_collection)
 
 	fmt.Println("repo", category)

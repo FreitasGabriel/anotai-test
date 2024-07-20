@@ -10,15 +10,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func InitProductDep(database *mongo.Database) productController.ProductControllerInterface {
-	repo := productRepository.NewProductRepository(database)
-	service := productService.NewProductService(repo)
-	return productController.NewProductController(service)
-}
+func InitDep(database *mongo.Database) (
+	productController.ProductControllerInterface,
+	categoryController.CategoryControllerInterface) {
 
-func InitCategoryDep(database *mongo.Database) categoryController.CategoryControllerInterface {
+	productRepo := productRepository.NewProductRepository(database)
+	productService := productService.NewProductService(productRepo)
+
 	repo := categoryRepository.NewCategoryRepository(database)
-	service := categoryService.NewCategoryService(repo)
-	return categoryController.NewCategoryController(service)
-
+	service := categoryService.NewCategoryService(repo, productService)
+	return productController.NewProductController(productService), categoryController.NewCategoryController(service)
 }

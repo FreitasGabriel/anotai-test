@@ -10,9 +10,9 @@ import (
 
 func (cr *categoryRepositoryInterface) FindCategory(categoryID string) (*entity.CategoryEntity, error) {
 
-	category_colelction := os.Getenv(MONGO_COLLECTION)
+	categoryCollection := os.Getenv(CATEGORY_COLLECTION)
 
-	collection := cr.databaseConn.Collection(category_colelction)
+	collection := cr.databaseConn.Collection(categoryCollection)
 	var category entity.CategoryEntity
 	filter := bson.D{{Key: "id", Value: categoryID}}
 

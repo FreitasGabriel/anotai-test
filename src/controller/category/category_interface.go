@@ -5,7 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewCategoryController(service service.CategoryServiceInterface) CategoryControllerInterface {
+func NewCategoryController(
+	service service.CategoryServiceInterface) CategoryControllerInterface {
 	return &categoryControllerInterface{
 		service: service,
 	}

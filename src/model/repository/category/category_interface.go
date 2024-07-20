@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	MONGO_COLLECTION = "CATEGORY_COLLECTION_NAME"
-	ctx              = context.Background()
+	CATEGORY_COLLECTION = "CATEGORY_COLLECTION_NAME"
+	ctx                 = context.Background()
 )
 
 func NewCategoryRepository(database *mongo.Database) CategoryRepositoryInterface {
@@ -26,4 +26,5 @@ type categoryRepositoryInterface struct {
 type CategoryRepositoryInterface interface {
 	CreateCategory(category domain.CategoryDomainInterface) error
 	FindCategory(id string) (*entity.CategoryEntity, error)
+	DeleteCategory(id string) error
 }

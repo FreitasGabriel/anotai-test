@@ -4,19 +4,25 @@ import (
 	domain "github.com/FreitasGabriel/anotai-test/src/model/domain/category"
 	repository "github.com/FreitasGabriel/anotai-test/src/model/repository/category"
 	"github.com/FreitasGabriel/anotai-test/src/model/repository/entity"
+	service "github.com/FreitasGabriel/anotai-test/src/model/service/product"
 )
 
-func NewCategoryService(repository repository.CategoryRepositoryInterface) CategoryServiceInterface {
+func NewCategoryService(
+	repository repository.CategoryRepositoryInterface,
+	productService service.ProductDomainService) CategoryServiceInterface {
 	return &categoryServiceInterface{
-		repository: repository,
+		repository:     repository,
+		productService: productService,
 	}
 }
 
 type categoryServiceInterface struct {
-	repository repository.CategoryRepositoryInterface
+	repository     repository.CategoryRepositoryInterface
+	productService service.ProductDomainService
 }
 
 type CategoryServiceInterface interface {
 	CreateCategory(category domain.CategoryDomainInterface) error
+	DeleteCategory(id string) error
 	FindCategory(id string) (*entity.CategoryEntity, error)
 }

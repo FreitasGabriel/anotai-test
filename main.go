@@ -30,8 +30,8 @@ func main() {
 		return
 	}
 
-	productController := configuration.InitProductDep(db)
-	categoryController := configuration.InitCategoryDep(db)
+	productController, categoryController := configuration.InitDep(db)
+
 	router := gin.Default()
 	routes.InitProductRoutes(&router.RouterGroup, productController)
 	routes.InitCategoryRoutes(&router.RouterGroup, categoryController)
