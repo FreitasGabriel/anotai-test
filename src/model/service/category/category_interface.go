@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/FreitasGabriel/anotai-test/src/configuration/rest_err"
 	domain "github.com/FreitasGabriel/anotai-test/src/model/domain/category"
 	repository "github.com/FreitasGabriel/anotai-test/src/model/repository/category"
 	"github.com/FreitasGabriel/anotai-test/src/model/repository/entity"
@@ -23,6 +24,6 @@ type categoryServiceInterface struct {
 
 type CategoryServiceInterface interface {
 	CreateCategory(category domain.CategoryDomainInterface) error
-	DeleteCategory(id string) error
+	DeleteCategory(id string) *rest_err.RestErr
 	FindCategory(id string) (*entity.CategoryEntity, error)
 }

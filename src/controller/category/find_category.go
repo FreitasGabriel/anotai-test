@@ -16,6 +16,7 @@ func (cc *categoryControllerInterface) FindCategoryByID(c *gin.Context) {
 	if err != nil {
 		logger.Error("error to find category", err, zap.String("journey", "findCategory"))
 		c.JSON(http.StatusNotFound, "error to find category")
+		return
 	}
 
 	c.JSON(http.StatusOK, result)

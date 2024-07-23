@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
@@ -33,14 +32,12 @@ func (pc productControlerInterface) CreateProduct(c *gin.Context) {
 		product.Price,
 	)
 
-	result, err := pc.service.CreateProduct(domain)
+	_, err := pc.service.CreateProduct(domain)
 	if err != nil {
 		logger.Error("error to create product handler", err, zap.String("journey", "createProduct"))
 		c.JSON(http.StatusInternalServerError, rest_err.NewInternalServerError("error to create productr handler"))
 		return
 	}
-
-	fmt.Println(result)
 
 	logger.Info("product created successfully", zap.String("journey", "createProduct"))
 	c.JSON(http.StatusCreated, "product created successfully")

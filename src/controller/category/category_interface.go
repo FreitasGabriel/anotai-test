@@ -19,4 +19,5 @@ type categoryControllerInterface struct {
 type CategoryControllerInterface interface {
 	CreateCategory(c *gin.Context)
 	FindCategoryByID(c *gin.Context)
+	DeleteCategory(c *gin.Context)
 }

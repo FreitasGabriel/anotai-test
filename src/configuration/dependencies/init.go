@@ -16,8 +16,8 @@ func InitDep(database *mongo.Database) (
 
 	productRepo := productRepository.NewProductRepository(database)
 	productService := productService.NewProductService(productRepo)
+	categoryRepo := categoryRepository.NewCategoryRepository(database)
+	categoryService := categoryService.NewCategoryService(categoryRepo, productService)
 
-	repo := categoryRepository.NewCategoryRepository(database)
-	service := categoryService.NewCategoryService(repo, productService)
-	return productController.NewProductController(productService), categoryController.NewCategoryController(service)
+	return productController.NewProductController(productService), categoryController.NewCategoryController(categoryService)
 }

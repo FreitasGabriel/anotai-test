@@ -56,12 +56,14 @@ func (pc *productControlerInterface) FindProductsByCategoryID(c *gin.Context) {
 	if uuidErr != nil {
 		logger.Error("categoryID is a not valid id", uuidErr, zap.String("Journey", "findProductsByCategoryID"))
 		c.JSON(http.StatusBadRequest, "categoryID is a invalided id")
+		return
 	}
 
 	result, err := pc.service.FindProductsByCategoryID(categoryID)
 	if err != nil {
 		logger.Error(fmt.Sprintf("could not possible to find products with this category id : %s", categoryID), err, zap.String("journey", "findProductsByCategoryID"))
 		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
 
 	c.JSON(http.StatusOK, result)

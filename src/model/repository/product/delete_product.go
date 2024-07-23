@@ -1,26 +1,31 @@
 package repository
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
+	"github.com/FreitasGabriel/anotai-test/src/configuration/rest_err"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.uber.org/zap"
 )
 
-func (pr *productRepositoryInterface) DeleteProduct(id string) (string, error) {
+func (pr *productRepositoryInterface) DeleteProduct(id string) error {
 	collection_name := os.Getenv(COLLECTION_NAME)
 	collection := pr.databaseConn.Collection(collection_name)
 	filter := bson.D{{Key: "id", Value: id}}
 
 	result, err := collection.DeleteOne(ctx, filter)
 	if err != nil {
-		logger.Error("error to delete document", err, zap.String("journey", "deleteProduct"))
-		return "", err
+		logger.Error("error to delete document", rest_err.NewInternalServerError(err.Error()), zap.String("journey", "deleteProduct"))
+		return rest_err.NewInternalServerError(err.Error())
 	}
 
-	fmt.Println("result", result)
+	if result.DeletedCount == 0 {
+		logger.Error("there is no document with this productId", rest_err.NewNotFoundError("there is no document with this productId"), zap.String("journey", "deleteproduct"))
+		return rest_err.NewNotFoundError("there is no document with this productId")
+	}
 
-	return "product deleted successfully", nil
+	logger.Info("product deleted succesfully")
+
+	return nil
 }
