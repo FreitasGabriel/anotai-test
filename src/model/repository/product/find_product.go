@@ -23,10 +23,10 @@ func (pr *productRepositoryInterface) FindProductByID(id string) (*entity.Produc
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			logger.Error("product not found", err, zap.String("journey", "findProductByID"))
-			return nil, rest_err.NewNotFoundError("product not found")
+			return nil, rest_err.NewNotFoundError(err.Error())
 		}
 		logger.Error("error to get product", err, zap.String("journey", "findProductByID"))
-		return nil, rest_err.NewInternalServerError("error to get product")
+		return nil, rest_err.NewInternalServerError(err.Error())
 	}
 
 	return &product, nil
@@ -42,16 +42,17 @@ func (pr *productRepositoryInterface) FindProductsByTitle(title string) (*[]enti
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			logger.Error("product not found", err, zap.String("journey", "findProductByTitle"))
-			return nil, rest_err.NewNotFoundError("product not found")
+			return nil, rest_err.NewNotFoundError(err.Error())
 		}
 		logger.Error("error to get product", err, zap.String("journey", "findProductByTitle"))
-		return nil, rest_err.NewInternalServerError("error to get product")
+		return nil, rest_err.NewInternalServerError(err.Error())
 	}
 
 	defer cursor.Close(ctx)
 
 	if cursorErr := cursor.All(ctx, &products); cursorErr != nil {
 		logger.Error("could not possible to cursor into slice", err, zap.String("journey", "findProductByTitle"))
+		return nil, rest_err.NewInternalServerError(cursorErr.Error())
 	}
 
 	return &products, nil
@@ -71,14 +72,15 @@ func (pr *productRepositoryInterface) FindProductsByCategoryID(category_id strin
 		}
 		logger.Error("error to get products", err, zap.String("journey", "findProductsByCategoryID"))
 	}
+	defer cursor.Close(ctx)
 
 	if err := cursor.All(ctx, &products); err != nil {
 		if err == mongo.ErrNilCursor {
 			logger.Error("could not possible to cursor the products", err, zap.String("journey", "findProductsByCategoryID"))
-			return nil, rest_err.NewInternalServerError("could not posible to cursor the products")
+			return nil, rest_err.NewInternalServerError(err.Error())
 		}
 		logger.Error("error to get products", err, zap.String("journey", "findProductsByCategoryID"))
-		return nil, rest_err.NewInternalServerError("error to get products")
+		return nil, rest_err.NewInternalServerError(err.Error())
 	}
 
 	logger.Info(fmt.Sprintf("Find products with category id: %s successfully", category_id), zap.String("journey", "findProductsByCategoryID"))

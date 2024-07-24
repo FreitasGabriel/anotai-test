@@ -9,7 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (pr *productRepositoryInterface) DeleteProduct(id string) error {
+func (pr *productRepositoryInterface) DeleteProduct(id string) *rest_err.RestErr {
 	collection_name := os.Getenv(COLLECTION_NAME)
 	collection := pr.databaseConn.Collection(collection_name)
 	filter := bson.D{{Key: "id", Value: id}}

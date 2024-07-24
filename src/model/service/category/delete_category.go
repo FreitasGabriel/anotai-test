@@ -12,8 +12,9 @@ func (cs *categoryServiceInterface) DeleteCategory(id string) *rest_err.RestErr 
 	if err != nil {
 		logger.Error("error to find products with this categoryID", err, zap.String("jounery", "deleteCategory"))
 		return &rest_err.RestErr{
-			Code:    500,
-			Message: err.Err,
+			Code:    err.Code,
+			Message: err.Message,
+			Err:     err.Err,
 		}
 	}
 	if len(*result) > 0 {
@@ -23,8 +24,9 @@ func (cs *categoryServiceInterface) DeleteCategory(id string) *rest_err.RestErr 
 			zap.String("journey", "deleteCategory"),
 		)
 		return &rest_err.RestErr{
-			Code:    404,
-			Message: "could not possible to delete category because there are products with this categoryID",
+			Code:    err.Code,
+			Message: err.Message,
+			Err:     err.Err,
 		}
 	}
 
@@ -32,8 +34,9 @@ func (cs *categoryServiceInterface) DeleteCategory(id string) *rest_err.RestErr 
 	if deleteErr != nil {
 		logger.Error("Error to delete category from database", err, zap.String("journey", "deleteCategory"))
 		return &rest_err.RestErr{
-			Code:    deleteErr.Code,
-			Message: deleteErr.Message,
+			Code:    err.Code,
+			Message: err.Message,
+			Err:     err.Err,
 		}
 	}
 

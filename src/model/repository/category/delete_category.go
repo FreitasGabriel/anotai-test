@@ -18,18 +18,12 @@ func (cr *categoryRepositoryInterface) DeleteCategory(id string) *rest_err.RestE
 	result, err := collection.DeleteOne(ctx, filter)
 	if err != nil {
 		logger.Error("could not to delete the category from database", err, zap.String("journey", "deleteCategory"))
-		return &rest_err.RestErr{
-			Code:    500,
-			Message: err.Error(),
-		}
+		return rest_err.NewInternalServerError(err.Error())
 	}
 
 	if result.DeletedCount == 0 {
 		logger.Error("there is no document with this categoryId", rest_err.NewNotFoundError("there is no document with this categoryId"), zap.String("journey", "deleteCategory"))
-		return &rest_err.RestErr{
-			Code:    404,
-			Message: "there is no document with this categoryId",
-		}
+		return rest_err.NewNotFoundError("there is no document with this categoryId")
 	}
 
 	logger.Info("category deleted succesfully")

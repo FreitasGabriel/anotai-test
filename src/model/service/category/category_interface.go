@@ -23,7 +23,7 @@ type categoryServiceInterface struct {
 }
 
 type CategoryServiceInterface interface {
-	CreateCategory(category domain.CategoryDomainInterface) error
+	CreateCategory(category domain.CategoryDomainInterface) *rest_err.RestErr
 	DeleteCategory(id string) *rest_err.RestErr
-	FindCategory(id string) (*entity.CategoryEntity, error)
+	FindCategory(id string) (*entity.CategoryEntity, *rest_err.RestErr)
 }

@@ -23,5 +23,5 @@ type ProductDomainService interface {
 	FindProductByID(id string) (*entity.ProductEntity, *rest_err.RestErr)
 	FindProductsByTitle(title string) (*[]entity.ProductEntity, *rest_err.RestErr)
 	FindProductsByCategoryID(category_id string) (*[]entity.ProductEntity, *rest_err.RestErr)
-	DeleteProduct(id string) error
+	DeleteProduct(id string) *rest_err.RestErr
 }

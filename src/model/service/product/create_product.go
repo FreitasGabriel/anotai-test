@@ -13,7 +13,11 @@ func (pd *productDomainService) CreateProduct(product productDomain.ProductDomai
 	result, err := pd.productRepository.CreateProduct(product)
 	if err != nil {
 		logger.Error("error to create product", err, zap.String("journey", "createProduct"))
-		return nil, rest_err.NewInternalServerError("error to create product")
+		return nil, &rest_err.RestErr{
+			Code:    err.Code,
+			Message: err.Message,
+			Err:     err.Err,
+		}
 	}
 
 	logger.Info("product created with succesfully")

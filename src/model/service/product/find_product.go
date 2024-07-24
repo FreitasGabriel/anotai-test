@@ -14,7 +14,11 @@ func (ps *productDomainService) FindProductByID(id string) (*entity.ProductEntit
 	product, err := ps.productRepository.FindProductByID(id)
 	if err != nil {
 		logger.Error("errot to find product", err, zap.String("journey", "findProductByID"))
-		return nil, err
+		return nil, &rest_err.RestErr{
+			Code:    err.Code,
+			Message: err.Message,
+			Err:     err.Err,
+		}
 	}
 	logger.Info("product find successfully")
 	return product, nil
@@ -24,7 +28,11 @@ func (ps *productDomainService) FindProductsByTitle(title string) (*[]entity.Pro
 	products, err := ps.productRepository.FindProductsByTitle(title)
 	if err != nil {
 		logger.Error("error to find product with this title", err, zap.String("journey", "findProductsByID"))
-		return nil, err
+		return nil, &rest_err.RestErr{
+			Code:    err.Code,
+			Message: err.Message,
+			Err:     err.Err,
+		}
 	}
 
 	logger.Info("products find successfully")
@@ -35,7 +43,11 @@ func (ps *productDomainService) FindProductsByCategoryID(category_id string) (*[
 	products, err := ps.productRepository.FindProductsByCategoryID(category_id)
 	if err != nil {
 		logger.Error(fmt.Sprintf("could not possible to find products with this category id : %s", category_id), err, zap.String("journey", "findProductsByProductID"))
-		return nil, rest_err.NewInternalServerError(fmt.Sprintf("could not possible to find products with this category id : %s", category_id))
+		return nil, &rest_err.RestErr{
+			Code:    err.Code,
+			Message: err.Message,
+			Err:     err.Err,
+		}
 	}
 
 	logger.Info("products with this category_id finded successfully")

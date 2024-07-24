@@ -24,9 +24,9 @@ type productRepositoryInterface struct {
 }
 
 type ProductRepositoryInterface interface {
-	CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, error)
+	CreateProduct(product productDomain.ProductDomainInterface) (*mongo.InsertOneResult, *rest_err.RestErr)
 	FindProductByID(id string) (*entity.ProductEntity, *rest_err.RestErr)
 	FindProductsByTitle(title string) (*[]entity.ProductEntity, *rest_err.RestErr)
 	FindProductsByCategoryID(category_id string) (*[]entity.ProductEntity, *rest_err.RestErr)
-	DeleteProduct(id string) error
+	DeleteProduct(id string) *rest_err.RestErr
 }

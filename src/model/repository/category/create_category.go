@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/FreitasGabriel/anotai-test/src/configuration/rest_err"
 	domain "github.com/FreitasGabriel/anotai-test/src/model/domain/category"
 	"github.com/FreitasGabriel/anotai-test/src/model/repository/entity/converter"
 )
 
-func (cr *categoryRepositoryInterface) CreateCategory(category domain.CategoryDomainInterface) error {
+func (cr *categoryRepositoryInterface) CreateCategory(category domain.CategoryDomainInterface) *rest_err.RestErr {
 
 	mongo_collection := os.Getenv(CATEGORY_COLLECTION)
 	collection := cr.databaseConn.Collection(mongo_collection)
@@ -18,12 +19,10 @@ func (cr *categoryRepositoryInterface) CreateCategory(category domain.CategoryDo
 
 	fmt.Println("repo value", value)
 
-	result, err := collection.InsertOne(ctx, value)
+	_, err := collection.InsertOne(ctx, value)
 	if err != nil {
-		return err
+		return rest_err.NewInternalServerError(err.Error())
 	}
-
-	fmt.Println("result", result)
 
 	return nil
 }
