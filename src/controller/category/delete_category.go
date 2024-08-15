@@ -1,20 +1,17 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
+	"github.com/FreitasGabriel/anotai-test/src/configuration/queue"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
 func (cc *categoryControllerInterface) DeleteCategory(c *gin.Context) {
-
 	category_id := c.Param("id")
-
-	fmt.Println("category", category_id)
 
 	uuidError := uuid.Validate(category_id)
 	if uuidError != nil {
@@ -30,6 +27,10 @@ func (cc *categoryControllerInterface) DeleteCategory(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, "category deleted successfully")
+	queueErr := queue.QueueSendMessage(`{"owner": "1"}`)
+	if queueErr != nil {
+		logger.Error("error to publish message on queue", queueErr, zap.String("journey", "createCategory"))
+	}
 
+	c.JSON(http.StatusOK, "category deleted successfully")
 }

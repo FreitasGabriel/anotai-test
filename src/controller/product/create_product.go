@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/FreitasGabriel/anotai-test/src/configuration/logger"
+	"github.com/FreitasGabriel/anotai-test/src/configuration/queue"
 	"github.com/FreitasGabriel/anotai-test/src/configuration/rest_err"
 	"github.com/FreitasGabriel/anotai-test/src/controller/model/request"
 	domain "github.com/FreitasGabriel/anotai-test/src/model/domain/product"
@@ -37,6 +39,11 @@ func (pc productControlerInterface) CreateProduct(c *gin.Context) {
 		logger.Error("error to create product handler", err, zap.String("journey", "createProduct"))
 		c.JSON(http.StatusInternalServerError, rest_err.NewInternalServerError("error to create productr handler"))
 		return
+	}
+
+	queueErr := queue.QueueSendMessage(fmt.Sprintf(`{"owner": "%s"}`, product.OwnerID))
+	if queueErr != nil {
+		logger.Error("error to publish message on queue", queueErr, zap.String("journey", "createCategory"))
 	}
 
 	logger.Info("product created successfully", zap.String("journey", "createProduct"))
